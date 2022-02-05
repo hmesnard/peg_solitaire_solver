@@ -14,17 +14,17 @@ move	moves[32];
 char game[7][7] = {
 	{-1, -1, 1, 1, 1, -1, -1},
 	{-1, -1, 1, 1, 1, -1, -1},
-	{1, 1, 1, 1, 1, 1, 1},
-	{1, 1, 1, 0, 1, 1, 1},
-	{1, 1, 1, 1, 1, 1, 1},
+	{ 1,  1, 1, 1, 1,  1,  1},
+	{ 1,  1, 1, 0, 1,  1,  1},
+	{ 1,  1, 1, 1, 1,  1,  1},
 	{-1, -1, 1, 1, 1, -1, -1},
 	{-1, -1, 1, 1, 1, -1, -1},
 };
 
 void	print_game()
 {
-	printf("\n\n");
-	usleep(100000);
+	/*printf("\n\n");
+	usleep(10000);
 	for (int y = 0; y < 7; y++)
 	{
 		for(int x = 0; x < 7; x++)
@@ -37,7 +37,7 @@ void	print_game()
 				printf("#");	
 		}
 		printf("\n");
-	}
+	}*/
 }
 
 int	win()
@@ -55,74 +55,50 @@ int	win()
 	return (1);
 }
 
-void	mk_move(char x, char y, char d)
+void	mk_move(char x, char y, char d, char rm)
 {
-	int i = 0;
-	while(i < 32)
-	{
-		if (moves[i].x == -1)
-		{
-			moves[i].x = x;
-			moves[i].y = y;
-			moves[i].d = d;
-			moves[i + 1].x = -1;
-			return ;
-		}
-		i++;
-	}
-	printf("Error : not enough moves\n");
-	exit(1);
+	moves[rm].x = x;
+	moves[rm].y = y;
+	moves[rm].d = d;
+	moves[rm + 1].x = -1;
+	return ;
 }
 
-void	rm_move()
+void	rm_move(char rm)
 {
-	int i = 0;
-	while (i < 32)
-	{
-		if (moves[i].x == -1 && i > 0)
-		{
-			moves[i - 1].x = -1;
-			return ;
-		}
-		i++;
-	}
-	printf("Error : unknown\n");
-	exit(1);
+	moves[rm].x = -1;
+	return ;
 }
 
 void	print_moves()
 {
 	int i = 0;
-	while (i < 32 && moves[i].x != -1)
+	while (i < 31)
 	{
-		printf("y %d x %d ", moves[i].y, moves[i].x);
 		switch (moves[i].d)
 		{
 			case (0):
-				printf("bas");
+				printf("move (x %d y %d) to (x %d y %d) --- DOWN\n", moves[i].x, moves[i].y - 1, moves[i].x, moves[i].y + 1);
 				break;
 			case(1):
-				printf("haut");
+				printf("move (x %d y %d) to (x %d y %d) --- UP\n", moves[i].x, moves[i].y + 1, moves[i].x, moves[i].y - 1);
 				break;
 			case(2):
-				printf("droite");
+				printf("move (x %d y %d) to (x %d y %d) --- RIGHT\n", moves[i].x - 1, moves[i].y, moves[i].x + 1, moves[i].y);
 				break;
 			case(3):
-				printf("gauche");
+				printf("move (x %d y %d) to (x %d y %d) --- LEFT\n", moves[i].x + 1, moves[i].y, moves[i].x - 1, moves[i].y);
 				break;
 			default:
 				printf("wtf");
 				break;
 		}
-		printf("\n");
 		i++;
 	}
 }
 
 void	solve(char x, char y, char rm)
 {
-	//printf("y %d x %d\n", y, x);
-	//printf("%d\n", rm);
 	if (rm == 31)
 	{
 		print_moves();
@@ -135,10 +111,10 @@ void	solve(char x, char y, char rm)
 			game[y - 1][x] = 0;
 			game[y][x] = 0;
 			game[y + 1][x] = 1;
-			mk_move(x, y, 0);
+			mk_move(x, y, 0, rm);
 	print_game();
 			solve(0, 0, rm + 1);
-			rm_move();
+			rm_move(rm);
 			game[y - 1][x] = 1;
 			game[y][x] = 1;
 			game[y + 1][x] = 0;
@@ -149,10 +125,10 @@ void	solve(char x, char y, char rm)
 			game[y - 1][x] = 1;
 			game[y][x] = 0;
 			game[y + 1][x] = 0;
-			mk_move(x, y, 1);
+			mk_move(x, y, 1, rm);
 	print_game();
 			solve(0, 0, rm + 1);
-			rm_move();
+			rm_move(rm);
 			game[y - 1][x] = 0;
 			game[y][x] = 1;
 			game[y + 1][x] = 1;
@@ -163,10 +139,10 @@ void	solve(char x, char y, char rm)
 			game[y][x - 1] = 0;
 			game[y][x] = 0;
 			game[y][x + 1] = 1;
-			mk_move(x, y, 2);
+			mk_move(x, y, 2, rm);
 	print_game();
 			solve(0, 0, rm + 1);
-			rm_move();
+			rm_move(rm);
 			game[y][x - 1] = 1;
 			game[y][x] = 1;
 			game[y][x + 1] = 0;
@@ -177,21 +153,16 @@ void	solve(char x, char y, char rm)
 			game[y][x - 1] = 1;
 			game[y][x] = 0;
 			game[y][x + 1] = 0;
-			mk_move(x, y, 3);
+			mk_move(x, y, 3, rm);
 	print_game();
 			solve(0, 0, rm + 1);
-			rm_move();
+			rm_move(rm);
 			game[y][x - 1] = 0;
 			game[y][x] = 1;
 			game[y][x + 1] = 1;
 	print_game();
 		}
 	}
-	/*if (win())
-	{
-		print_moves();
-		exit(0);
-	}*/
 	if (x == 6 && y == 6)
 		return ;
 	else if (x == 6)
