@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 typedef struct m
 {
@@ -8,7 +9,7 @@ typedef struct m
 	char d;
 }				move;
 
-move	moves[500];
+move	moves[32];
 
 char game[7][7] = {
 	{-1, -1, 1, 1, 1, -1, -1},
@@ -19,6 +20,25 @@ char game[7][7] = {
 	{-1, -1, 1, 1, 1, -1, -1},
 	{-1, -1, 1, 1, 1, -1, -1},
 };
+
+void	print_game()
+{
+	printf("\n\n");
+	usleep(100000);
+	for (int y = 0; y < 7; y++)
+	{
+		for(int x = 0; x < 7; x++)
+		{
+			if (game[y][x] == -1)
+				printf(" ");
+			else if (game[y][x] == 0)
+				printf("`");
+			else if (game[y][x] == 1)
+				printf("#");	
+		}
+		printf("\n");
+	}
+}
 
 int	win()
 {
@@ -38,7 +58,7 @@ int	win()
 void	mk_move(char x, char y, char d)
 {
 	int i = 0;
-	while(i < 500)
+	while(i < 32)
 	{
 		if (moves[i].x == -1)
 		{
@@ -57,7 +77,7 @@ void	mk_move(char x, char y, char d)
 void	rm_move()
 {
 	int i = 0;
-	while (i < 500)
+	while (i < 32)
 	{
 		if (moves[i].x == -1 && i > 0)
 		{
@@ -73,7 +93,7 @@ void	rm_move()
 void	print_moves()
 {
 	int i = 0;
-	while (i < 500 && moves[i].x != -1)
+	while (i < 32 && moves[i].x != -1)
 	{
 		printf("y %d x %d ", moves[i].y, moves[i].x);
 		switch (moves[i].d)
@@ -102,7 +122,7 @@ void	print_moves()
 void	solve(char x, char y, char rm)
 {
 	//printf("y %d x %d\n", y, x);
-	printf("%d\n", rm);
+	//printf("%d\n", rm);
 	if (rm == 31)
 	{
 		print_moves();
@@ -116,11 +136,13 @@ void	solve(char x, char y, char rm)
 			game[y][x] = 0;
 			game[y + 1][x] = 1;
 			mk_move(x, y, 0);
+	print_game();
 			solve(0, 0, rm + 1);
 			rm_move();
 			game[y - 1][x] = 1;
 			game[y][x] = 1;
 			game[y + 1][x] = 0;
+	print_game();
 		}
 		if (0 < y && y < 6 && game[y - 1][x] == 0 && game[y + 1][x] == 1)
 		{
@@ -128,11 +150,13 @@ void	solve(char x, char y, char rm)
 			game[y][x] = 0;
 			game[y + 1][x] = 0;
 			mk_move(x, y, 1);
+	print_game();
 			solve(0, 0, rm + 1);
 			rm_move();
 			game[y - 1][x] = 0;
 			game[y][x] = 1;
 			game[y + 1][x] = 1;
+	print_game();
 		}
 		if (0 < x && x < 6 && game[y][x - 1] == 1 && game[y][x + 1] == 0)
 		{
@@ -140,23 +164,27 @@ void	solve(char x, char y, char rm)
 			game[y][x] = 0;
 			game[y][x + 1] = 1;
 			mk_move(x, y, 2);
+	print_game();
 			solve(0, 0, rm + 1);
 			rm_move();
 			game[y][x - 1] = 1;
 			game[y][x] = 1;
 			game[y][x + 1] = 0;
+	print_game();
 		}
 		if (0 < x && x < 6 && game[y][x - 1] == 0 && game[y][x + 1] == 1)
 		{
-			game[y][x + 1] = 1;
+			game[y][x - 1] = 1;
 			game[y][x] = 0;
 			game[y][x + 1] = 0;
 			mk_move(x, y, 3);
+	print_game();
 			solve(0, 0, rm + 1);
 			rm_move();
-			game[y][x + 1] = 0;
+			game[y][x - 1] = 0;
 			game[y][x] = 1;
 			game[y][x + 1] = 1;
+	print_game();
 		}
 	}
 	/*if (win())
