@@ -266,6 +266,6 @@ int main(int argc, char **argv)
 
 	solve(0, 0, 0);
 
-	printf("Could not find a solution\n");
+	write(2, "Could not find a solution\n", 26);
 	return (2);
 }
