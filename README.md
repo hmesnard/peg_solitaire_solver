@@ -13,7 +13,8 @@ Obviously, I did not want to check the solution on internet. So I challenged mys
 
 ```
 gcc solver.c
-
+```
+```
 ./a.out [-v d] [-s x y] [-e x y]
 ```
 - -v (visual) option prints on the console the moves the solver is trying in real time (d is the delay in microseconds between two move attemps). It will of course considerably slow the solver.
