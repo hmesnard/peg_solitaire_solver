@@ -5,12 +5,12 @@
 
 typedef struct	o
 {
-	char	visual;
+	int		visual;
 	int		time;
 
-	char	endPosition;
-	char	x;
-	char	y;
+	int		endPosition;
+	size_t	x;
+	size_t	y;
 }				options;
 
 options	opt;
@@ -64,7 +64,7 @@ void	print_game()
 	write(1, buf, 56);
 }
 
-void	mk_move(char x, char y, char d, char rm)
+void	mk_move(char x, char y, char d, size_t rm)
 {
 	moves[rm].x = x;
 	moves[rm].y = y;
@@ -73,7 +73,7 @@ void	mk_move(char x, char y, char d, char rm)
 	return ;
 }
 
-void	rm_move(char rm)
+void	rm_move(size_t rm)
 {
 	moves[rm].x = -1;
 	return ;
@@ -81,7 +81,7 @@ void	rm_move(char rm)
 
 void	print_moves()
 {
-	int i = 0;
+	size_t i = 0;
 	while (i < 31)
 	{
 		switch (moves[i].d)
