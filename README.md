@@ -14,7 +14,7 @@ Obviously, I did not want to check the solution on internet. So I challenged mys
 ```
 gcc solver.c
 ```
-Note : using char type for solver fonction parameters will give compilation warnings when compiling with -Wall flag as we use them as array indexes but I think it is more efficient like this to avoid too much stack memory usage as this function will be recursively called a lot of time (parameters value will never exceed 31).
+Note : using char type for solver fonction parameters will give compilation warnings when compiling with -Wall flag as we use them as array indexes but I think it is more efficient like this to avoid too much stack memory usage as this function will be recursively called many times (parameters value will never exceed 31).
 ```
 ./a.out [-v d] [-s x y] [-e x y]
 ```
